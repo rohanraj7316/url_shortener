@@ -1,10 +1,13 @@
 package main
 
 func main() {
-	defer func() {
-		if r := recover(); r != nil {
-			// TODO: need to add logging.
-		}
-	}()
+
+	// initialize http server
+	if r := run(); r != nil {
+		// TODO: figure out what to do
+	}
+}
+
+func run() error {
 
 }
