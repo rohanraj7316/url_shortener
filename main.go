@@ -1,13 +1,21 @@
 package main
 
-func main() {
+import (
+	"url_shortener/app/services"
+)
 
-	// initialize http server
-	if r := run(); r != nil {
-		// TODO: figure out what to do
-	}
+func main() {
+	defer func() {
+		if err := recover(); err != nil {
+			// TODO: need to think abt the ways to handle this.
+		}
+	}()
+
+	// TODO: ways to handle .env files
+	// TODO: call to services.
+
 }
 
-func run() error {
-
+func h(fn services.Service) bool {
+	return services.Service(fn).StartServer
 }

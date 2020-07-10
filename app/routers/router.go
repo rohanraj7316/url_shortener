@@ -16,5 +16,5 @@ func RouterHandler() {
 
 // check for all handler
 func h(fn handlers.Handler) http.HandlerFunc {
-	return handlers.Handler(fn).ServerRequestHandler
+	return handlers.Handler(fn).ErrorHandler
 }
