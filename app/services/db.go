@@ -57,4 +57,6 @@ func (c collectionList) initializeCollection(name string) *collectionList {
 
 // GetCollection get collection
 func GetCollection(collection string) *mongo.Collection {
+	// TODO: need to figure out way to return the object only
+	return nil
 }
