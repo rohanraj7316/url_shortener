@@ -13,8 +13,6 @@ func InitService() {
 		}
 	}()
 
-	log.Println("initializing services")
-
 	err := LoadConfig()
 	if err != nil {
 		panic(err)

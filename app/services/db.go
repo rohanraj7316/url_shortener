@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"math/rand"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -51,7 +52,23 @@ func (c collectionList) initializeCollection(name string) *collectionList {
 }
 
 // GetCollection get collection
-func GetCollection(collection string) *mongo.Collection {
+func getCollection(collection string) *mongo.Collection {
 	// TODO: need to figure out way to return the object only
 	return nil
+}
+
+// InsertData insert data into given collection
+func InsertData(ctx context.Context, c string, filter interface{}, update interface{}) (*mongo.SingleResult, error) {
+	collection := getCollection(c)
+
+	var opt options.FindOneAndUpdateOptions
+	opt.SetUpsert(true)
+	opt.SetMaxTime(time.Duration(rand.Int31n(5000)) * time.Millisecond)
+
+	result := collection.FindOneAndUpdate(ctx, filter, update, &opt)
+	if err := result.Err(); err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
