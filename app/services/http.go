@@ -7,12 +7,10 @@ import (
 
 // StartServer initializing and starting http server
 func StartServer() error {
-
 	mux := routers.RouterHandler()
 	server := http.Server{
 		Addr:    ":2401",
 		Handler: mux,
 	}
-
-	panic(server.ListenAndServe())
+	return server.ListenAndServe()
 }

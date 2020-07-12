@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"url_shortener/app/services"
 )
 
@@ -11,11 +12,7 @@ func main() {
 		}
 	}()
 
-	// TODO: ways to handle .env files
-	// TODO: call to services.
-
-}
-
-func h(fn services.Service) bool {
-	return services.Service(fn).StartServer
+	log.Println("starting the server")
+	// load and intiate all the services
+	services.InitService()
 }

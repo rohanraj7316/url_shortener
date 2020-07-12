@@ -1,11 +1,82 @@
 package services
 
-// Service generic service handler
-type Service func(config interface{}) error
+import (
+	"log"
+)
 
-// ErrorService generic service error handler
-func (fn Service) ErrorService(c interface{}) {
-	if err := fn(c); err != nil {
-		// TODO: need to add logging here
+// InitService initialize the service
+func InitService() {
+	defer func() {
+		if err := recover(); err != nil {
+			// TODO: need to add logging.
+			log.Printf("[Error] service initialization: %v", err)
+		}
+	}()
+
+	log.Println("initializing services")
+
+	err := LoadConfig()
+	if err != nil {
+		panic(err)
 	}
+
+	err = StartServices()
+	if err != nil {
+		panic(err)
+	}
+
+	err = HealthCheck()
+	if err != nil {
+		panic(err)
+	}
+}
+
+// LoadConfig loading configs
+func LoadConfig() error {
+	// TODO: load .env files
+	return nil
+}
+
+// StartServices start all the services
+func StartServices() error {
+
+	var err error
+
+	// TODO: load the config and pass along all the variable
+
+	err = MongoConnection()
+	if err != nil {
+		return err
+	}
+
+	RedisConnection()
+
+	err = StartServer()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// HealthCheck health check for all services
+func HealthCheck() error {
+	var err error
+
+	err = MongoConnectionHealthCheck()
+	if err != nil {
+		return err
+	}
+
+	err = RedisConnectionHealthCheck()
+	if err != nil {
+		return err
+	}
+
+	err = StartServer()
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

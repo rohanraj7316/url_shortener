@@ -8,5 +8,5 @@ import (
 
 // CreateRouter create short urls
 func CreateRouter(r chi.Router) {
-	r.Get("health", h(handlers.GetHealth))
+	r.Get("/health", h(handlers.GetHealth))
 }

@@ -8,10 +8,11 @@ import (
 )
 
 // RouterHandler generic router handler
-func RouterHandler() {
+func RouterHandler() *chi.Mux {
 	r := chi.NewRouter()
 	r.Route("/{urlId}", RedirectRouter)
 	r.Route("/url-shortener", CreateRouter)
+	return r
 }
 
 // check for all handler
