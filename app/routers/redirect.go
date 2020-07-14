@@ -1,12 +1,12 @@
 package routers
 
 import (
-	"url_shortener/app/handlers"
+	"url_shortener/app/handlers/redirect"
 
 	"github.com/go-chi/chi"
 )
 
 // RedirectRouter url redirection
 func RedirectRouter(r chi.Router) {
-	r.Post("/health", h(handlers.GetHealth))
+	r.Get("/{urlId}", h(redirect.Redirect))
 }

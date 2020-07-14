@@ -72,3 +72,17 @@ func InsertData(ctx context.Context, c string, filter interface{}, update interf
 
 	return result, nil
 }
+
+// FindData find and return data from collection
+func FindData(ctx context.Context, c string, filter interface{}) (*mongo.SingleResult, error) {
+	collection := getCollection(c)
+
+	var opt *options.FindOneOptions
+
+	res := collection.FindOne(ctx, filter, opt)
+	if err := res.Err(); err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}

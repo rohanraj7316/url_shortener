@@ -1,7 +1,8 @@
 package main
 
 import (
-	"log"
+	"net/http"
+	"url_shortener/app/routers"
 	"url_shortener/app/services"
 )
 
@@ -12,7 +13,16 @@ func main() {
 		}
 	}()
 
-	log.Println("starting the server")
 	// load and intiate all the services
 	services.InitService()
+
+	// load routers
+	mux := routers.RouterHandler()
+
+	// load http servers
+	server := http.Server{
+		Addr:    ":2401",
+		Handler: mux,
+	}
+	panic(server.ListenAndServe())
 }

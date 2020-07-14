@@ -2,15 +2,18 @@ package models
 
 import "time"
 
+// URLDataCollectionName collection name
+const URLDataCollectionName = "URLData"
+
 // URLData mongo schema
 type URLData struct {
-	CreatedAt   time.Time `bson:"expireAt" json:"createdAt"`
-	UpdateAt    time.Time `bson:"expireAt" json:"updateAt"`
-	ExpireAt    time.Time `bson:"expireAt" json:"expireAt"`
-	URLHash     string    `bson:"urlHash" json:"urlHash"`
-	URLOriginal string    `bson:"urlOriginal" json:"urlOriginal"`
-	IsWebToWeb  bool      `bson:"isWebToWeb" json:"isWebToWeb"`
-	IsWebToMob  bool      `bson:"isWebToMob" json:"isWebToMob"`
-	IsMobToApp  bool      `bson:"isMobToApp" json:"isMobToApp"`
-	IsAppToApp  bool      `bson:"isAppToApp" json:"isAppToApp"`
+	CreatedAt   time.Time `bson:"createdAt" json:"createdAt" validate:"required"`
+	UpdateAt    time.Time `bson:"updateAt" json:"updateAt" validate:"required"`
+	ExpireAt    time.Time `bson:"expireAt" json:"expireAt" validate:"required" default:""`
+	URLHash     string    `bson:"urlHash" json:"urlHash" validate:"required"`
+	URLOriginal string    `bson:"urlOriginal" json:"urlOriginal" validate:"required"`
+	IsWebToWeb  bool      `bson:"isWebToWeb" json:"isWebToWeb" validate:"required"`
+	IsWebToMob  bool      `bson:"isWebToMob" json:"isWebToMob" validate:"required"`
+	IsMobToApp  bool      `bson:"isMobToApp" json:"isMobToApp" validate:"required"`
+	IsAppToApp  bool      `bson:"isAppToApp" json:"isAppToApp" validate:"required"`
 }

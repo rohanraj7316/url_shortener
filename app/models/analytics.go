@@ -2,6 +2,9 @@ package models
 
 import "time"
 
+// AdAnalyticsCollectionName collection name
+const AdAnalyticsCollectionName = "AdAnalytics"
+
 // AdAnalyticsSchema mongo schema
 type AdAnalyticsSchema struct {
 	CreatedAt   time.Time `bson:"createdAt" json:"createdAt"`

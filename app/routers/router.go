@@ -10,7 +10,7 @@ import (
 // RouterHandler generic router handler
 func RouterHandler() *chi.Mux {
 	r := chi.NewRouter()
-	r.Route("/{urlId}", RedirectRouter)
+	r.Route("/", RedirectRouter)
 	r.Route("/url-shortener", CreateRouter)
 	return r
 }

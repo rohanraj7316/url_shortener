@@ -49,11 +49,6 @@ func StartServices() error {
 
 	RedisConnection()
 
-	err = StartServer()
-	if err != nil {
-		return err
-	}
-
 	return nil
 }
 
@@ -67,11 +62,6 @@ func HealthCheck() error {
 	}
 
 	err = RedisConnectionHealthCheck()
-	if err != nil {
-		return err
-	}
-
-	err = StartServer()
 	if err != nil {
 		return err
 	}
