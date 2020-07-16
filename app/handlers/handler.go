@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"log"
 	"net/http"
 )
 
@@ -11,5 +12,6 @@ type Handler func(w http.ResponseWriter, r *http.Request) error
 func (fn Handler) ErrorHandler(w http.ResponseWriter, r *http.Request) {
 	if err := fn(w, r); err != nil {
 		// TODO: need to add logging
+		log.Println(err)
 	}
 }

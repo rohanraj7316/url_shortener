@@ -16,3 +16,6 @@
 
 # Env
 .env
+
+# Logs
+*.log

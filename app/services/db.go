@@ -15,9 +15,11 @@ type collectionList struct {
 	URLData   *mongo.Collection
 }
 
-// DbConnection mongo connection
-var DbConnection *mongo.Client
-var c collectionList
+// DBConnection mongo connection
+var DBConnection *mongo.Client
+
+// DB mongo database
+var DB *mongo.Database
 
 // MongoConnection establish connection to mongo db
 func MongoConnection() error {
@@ -29,7 +31,7 @@ func MongoConnection() error {
 	if err != nil {
 		return err
 	}
-	DbConnection = client
+	DBConnection = client
 	return nil
 }
 
@@ -37,28 +39,29 @@ func MongoConnection() error {
 func MongoConnectionHealthCheck() error {
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
-	err := DbConnection.Ping(ctx, readpref.Primary())
+	err := DBConnection.Ping(ctx, readpref.Primary())
 	if err != nil {
 		return err
 	}
-	return nil
-}
+	// TODO: need to pull DB name from env
+	DB = DBConnection.Database("DemoDB")
 
-func (c collectionList) initializeCollection(name string) *collectionList {
-	db := DbConnection.Database(name)
-	c.Analytics = db.Collection("Analytics")
-	c.URLData = db.Collection("URLData")
-	return &c
+	return nil
 }
 
 // GetCollection get collection
-func getCollection(collection string) *mongo.Collection {
-	// TODO: need to figure out way to return the object only
-	return nil
+func getCollection(c string) *mongo.Collection {
+	if c == "Analytics" {
+		return DB.Collection(c)
+	} else if c == "URLData" {
+		return DB.Collection(c)
+	} else {
+		return nil
+	}
 }
 
-// InsertData insert data into given collection
-func InsertData(ctx context.Context, c string, filter interface{}, update interface{}) (*mongo.SingleResult, error) {
+// UpdateData update data into given collection
+func UpdateData(ctx context.Context, c string, filter interface{}, update interface{}) (*mongo.SingleResult, error) {
 	collection := getCollection(c)
 
 	var opt options.FindOneAndUpdateOptions
@@ -79,10 +82,25 @@ func FindData(ctx context.Context, c string, filter interface{}) (*mongo.SingleR
 
 	var opt *options.FindOneOptions
 
-	res := collection.FindOne(ctx, filter, opt)
-	if err := res.Err(); err != nil {
+	result := collection.FindOne(ctx, filter, opt)
+	if err := result.Err(); err != nil {
 		return nil, err
 	}
 
-	return res, nil
+	return result, nil
+}
+
+// InsertData insert data into given collection
+func InsertData(ctx context.Context, c string, doc interface{}) (*mongo.InsertOneResult, error) {
+	collection := getCollection(c)
+
+	var opt *options.InsertOneOptions
+	opt.SetBypassDocumentValidation(false)
+
+	result, err := collection.InsertOne(ctx, doc, opt)
+	if err != nil {
+		return nil, err
+	}
+
+	return result, nil
 }
