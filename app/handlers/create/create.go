@@ -11,15 +11,23 @@ import (
 	"url_shortener/app/services"
 )
 
-func shortURLController(ctx context.Context, doc models.URLData) error {
+func shortURLController(doc models.URLData) error {
 
-	// updating data in redis
-	key := strconv.FormatUint(uint64(doc.URLHash), 10)
-	exp := time.Duration(doc.ExpireAt)
-	if err := services.SetValue(ctx, key, doc, exp.Second()); err != nil {
+	ctx := context.
+
+	// updating data into mongo db.
+	_, err := services.InsertData(ctx, models.URLDataCollectionName, doc)
+	if err != nil {
 		return err
 	}
-	return nil
+
+	// updating data in redis
+	// key := strconv.FormatUint(uint64(doc.URLHash), 10)
+	// exp := time.Duration(doc.ExpireAt)
+	// if err := services.SetValue(ctx, key, doc, exp.Second()); err != nil {
+	// 	return err
+	// }
+	// return nil
 }
 
 // ShortURL handler responsible for creating short url
@@ -54,9 +62,9 @@ func ShortURL(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	ctx := r.Context()
+	// ctx := r.Context()
 
-	if err = shortURLController(ctx, doc); err != nil {
+	if err = shortURLController(doc); err != nil {
 		return err
 	}
 

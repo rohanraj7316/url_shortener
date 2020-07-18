@@ -4,6 +4,7 @@ import (
 	"context"
 	"math/rand"
 	"time"
+	"url_shortener/app/models"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -24,8 +25,8 @@ var DB *mongo.Database
 // MongoConnection establish connection to mongo db
 func MongoConnection() error {
 	// TODO: get this value from env.
-	uri := "mongodb://localhost:27017"
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	uri := "mongodb://127.0.0.1:27017"
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Second)
 	defer cancel()
 	client, err := mongo.Connect(ctx, options.Client().ApplyURI(uri))
 	if err != nil {
@@ -45,7 +46,6 @@ func MongoConnectionHealthCheck() error {
 	}
 	// TODO: need to pull DB name from env
 	DB = DBConnection.Database("DemoDB")
-
 	return nil
 }
 
@@ -91,13 +91,10 @@ func FindData(ctx context.Context, c string, filter interface{}) (*mongo.SingleR
 }
 
 // InsertData insert data into given collection
-func InsertData(ctx context.Context, c string, doc interface{}) (*mongo.InsertOneResult, error) {
+func InsertData(ctx context.Context, c string, doc models.URLData) (*mongo.InsertOneResult, error) {
 	collection := getCollection(c)
 
-	var opt *options.InsertOneOptions
-	opt.SetBypassDocumentValidation(false)
-
-	result, err := collection.InsertOne(ctx, doc, opt)
+	result, err := collection.InsertOne(ctx, doc)
 	if err != nil {
 		return nil, err
 	}

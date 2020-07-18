@@ -1,8 +1,8 @@
 package main
 
 import (
+	"log"
 	"net/http"
-	"url_shortener/app/helpers"
 	"url_shortener/app/routers"
 	"url_shortener/app/services"
 )
@@ -11,12 +11,14 @@ func main() {
 	defer func() {
 		if err := recover(); err != nil {
 			// TODO: need to think abt the ways to handle this.
+			log.SetPrefix("[ ERROR MAIN ]")
+			log.Println(err)
 		}
 	}()
 
 	// TODO: need to give more thought on this
 	// load and intiate all logger services
-	helpers.InitLogger()
+	// helpers.InitLogger()
 
 	// load and intiate all services
 	services.InitService()
